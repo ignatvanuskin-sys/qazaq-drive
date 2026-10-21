@@ -51,3 +51,5 @@ audit*/
 audit-findings.md
 check-hero.js
 chk3.py
+polish*.py
+check-prod.js
