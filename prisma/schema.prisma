@@ -1,0 +1,197 @@
+// Prisma schema for QAZAQ DRIVE SCHOOL.
+// Default provider: SQLite (zero-config local run).
+// For production switch provider to "postgresql" and set DATABASE_URL — the
+// schema is written with Postgres-compatible types only.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Lead {
+  id             String    @id @default(cuid())
+  publicId       String    @unique
+  name           String
+  phone          String
+  intent         String // start | price | consult | schedule
+  programSlug    String?
+  format         String? // offline | online | individual | unspecified
+  contactMethod  String? // phone | whatsapp | telegram
+  contactWindow  String? // morning | afternoon | evening
+  comment        String?
+  consent        Boolean   @default(false)
+  status         String    @default("new") // new | contacted | scheduled | enrolled | done | spam
+  source         String    @default("direct") // instagram | 2gis | site | direct | ads...
+  utmSource      String?
+  utmMedium      String?
+  utmCampaign    String?
+  utmContent     String?
+  referrer       String?
+  locale         String    @default("ru")
+  pagePath       String?
+  origin         String    @default("form") // form | chat | admin
+  aiTranscript   String? // JSON of the chat that produced the lead
+  internalNotes  String?
+  lastContactAt  DateTime?
+  notifiedAt     DateTime?
+  notifyError    String?
+  crmSyncedAt    DateTime?
+  crmError       String?
+  duplicateHash  String?
+  ipHash         String?
+  userAgentHash  String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  events LeadEvent[]
+
+  @@index([createdAt])
+  @@index([status])
+  @@index([source])
+  @@index([duplicateHash])
+}
+
+model LeadEvent {
+  id        String   @id @default(cuid())
+  leadId    String
+  type      String // created | status | note | notify | crm | contact
+  payload   String?
+  actor     String   @default("system")
+  createdAt DateTime @default(now())
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@index([leadId])
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  sessionId String
+  role      String // user | assistant | system
+  content   String
+  locale    String   @default("ru")
+  leadId    String?
+  createdAt DateTime @default(now())
+
+  @@index([sessionId])
+}
+
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  locale    String   @default("ru")
+  source    String   @default("direct")
+  referrer  String?
+  sessionId String?
+  device    String? // mobile | tablet | desktop
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([source])
+}
+
+model Program {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  category      String // "B", "A", "A1", "BE"...
+  titleRu       String
+  titleKz       String
+  summaryRu     String
+  summaryKz     String
+  priceKzt      Int?
+  priceNote     String? // e.g. "рассрочка", "уточняется"
+  durationRu    String?
+  durationKz    String?
+  theoryRu      String?
+  theoryKz      String?
+  practiceRu    String?
+  practiceKz    String?
+  transmission  String? // manual | automatic | both
+  includesRu    String? // newline separated
+  includesKz    String?
+  extrasRu      String?
+  extrasKz      String?
+  isActive      Boolean  @default(true)
+  isPlaceholder Boolean  @default(false)
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model FaqItem {
+  id        String   @id @default(cuid())
+  questionRu String
+  questionKz String
+  answerRu   String
+  answerKz   String
+  isActive   Boolean  @default(true)
+  sortOrder  Int      @default(0)
+  needsOwner Boolean  @default(false)
+  updatedAt  DateTime @updatedAt
+}
+
+model Instructor {
+  id          String   @id @default(cuid())
+  name        String
+  roleRu      String?
+  roleKz      String?
+  experience  String?
+  specialties String?
+  languages   String?
+  photoUrl    String?
+  isActive    Boolean  @default(true)
+  isPlaceholder Boolean @default(true)
+  sortOrder   Int      @default(0)
+}
+
+model Vehicle {
+  id           String   @id @default(cuid())
+  make         String
+  model        String
+  transmission String?
+  category     String?
+  featuresRu   String?
+  featuresKz   String?
+  photoUrl     String?
+  isActive     Boolean  @default(true)
+  isPlaceholder Boolean @default(true)
+  sortOrder    Int      @default(0)
+}
+
+model Settings {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+model IntegrationLog {
+  id        String   @id @default(cuid())
+  channel   String // telegram | crm | email | ai
+  status    String // success | error | skipped
+  message   String?
+  leadId    String?
+  attempts  Int      @default(1)
+  createdAt DateTime @default(now())
+
+  @@index([channel])
+  @@index([createdAt])
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String   @default("Администратор")
+  role         String   @default("admin")
+  createdAt    DateTime @default(now())
+  lastLoginAt  DateTime?
+}
+
+model RateLimitBucket {
+  key       String   @id
+  count     Int      @default(0)
+  expiresAt DateTime
+}
