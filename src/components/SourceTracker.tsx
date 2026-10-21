@@ -65,18 +65,27 @@ export function SourceTracker({ locale }: { locale: string }) {
       }
     }
 
+    const payload = JSON.stringify({
+      path: pathname,
+      locale,
+      source: stored.source ?? (document.referrer ? "referral" : "direct"),
+      referrer: document.referrer || undefined,
+    });
+
+    // sendBeacon survives navigation/unload, which `fetch` with keepalive
+    // can lose — otherwise part of the page views never reaches analytics.
+    if (typeof navigator !== "undefined" && typeof navigator.sendBeacon === "function") {
+      const blob = new Blob([payload], { type: "application/json" });
+      if (navigator.sendBeacon("/api/track", blob)) return;
+    }
+
     const controller = new AbortController();
     fetch("/api/track", {
       method: "POST",
       headers: { "content-type": "application/json" },
       keepalive: true,
       signal: controller.signal,
-      body: JSON.stringify({
-        path: pathname,
-        locale,
-        source: stored.source ?? (document.referrer ? "referral" : "direct"),
-        referrer: document.referrer || undefined,
-      }),
+      body: payload,
     }).catch(() => undefined);
 
     return () => controller.abort();

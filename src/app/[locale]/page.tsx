@@ -142,6 +142,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               </div>
             ))}
           </dl>
+          <p className="pb-6 text-[0.7rem] text-[var(--color-faint)]">
+            {kz ? "2GIS деректері" : "Данные 2ГИС"} · {reviewMeta.checkedAt}
+          </p>
         </div>
       </section>
 

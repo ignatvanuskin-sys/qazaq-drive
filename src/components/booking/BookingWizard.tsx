@@ -227,7 +227,7 @@ export function BookingWizard({
       }.`,
     );
     return (
-      <div className="p-6 sm:p-8">
+      <div className="p-6 sm:p-8" role="status" aria-live="polite">
         <div className="flex size-12 items-center justify-center rounded-full bg-[rgba(207,133,81,0.14)] text-[var(--color-accent-soft)]">
           <Check size={22} />
         </div>
@@ -309,6 +309,22 @@ export function BookingWizard({
         >
           {stepTitles[step]}
         </h2>
+
+        {Object.keys(errors).length > 0 ? (
+          <div
+            role="alert"
+            className="mt-4 rounded-[8px] border border-[rgba(224,108,90,0.35)] bg-[rgba(224,108,90,0.08)] p-3"
+          >
+            <p className="text-[0.8rem] font-semibold text-[#f0937f]">{b.errors.summary}</p>
+            <ul className="mt-1.5 space-y-1 pl-4 text-[0.78rem] text-[var(--color-muted)]">
+              {Object.entries(errors).map(([key, message]) => (
+                <li key={key} className="list-disc">
+                  {message}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
 
         {/* Step 1 — intent */}
         {step === 0 ? (

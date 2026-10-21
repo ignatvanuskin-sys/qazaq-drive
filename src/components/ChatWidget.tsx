@@ -123,7 +123,7 @@ export function ChatWidget({ locale, t }: { locale: Locale; t: Dictionary }) {
         onClick={() => setOpen(true)}
         hidden={open || !launcherVisible || hideLauncher}
         aria-label={t.chat.launcher}
-        className="fixed bottom-[calc(5.4rem+env(safe-area-inset-bottom))] right-3 z-30 flex items-center gap-2 rounded-full border border-[var(--color-line-strong)] bg-[rgba(17,19,21,0.94)] py-2.5 pl-3 pr-3.5 text-[0.8125rem] font-semibold backdrop-blur-md transition-colors hover:border-[var(--color-accent)] sm:bottom-6 sm:right-6 sm:pr-4"
+        className="fixed bottom-[calc(5.4rem+env(safe-area-inset-bottom))] right-3 z-30 flex size-12 items-center justify-center rounded-full border border-[var(--color-line-strong)] bg-[rgba(17,19,21,0.94)] text-[0.8125rem] font-semibold backdrop-blur-md transition-colors hover:border-[var(--color-accent)] sm:bottom-6 sm:right-6 sm:size-auto sm:justify-start sm:gap-2 sm:py-2.5 sm:pl-3 sm:pr-4"
       >
         <span className="flex size-7 items-center justify-center rounded-full bg-[rgba(207,133,81,0.16)] text-[var(--color-accent-soft)]">
           <Chat size={15} />
@@ -155,7 +155,7 @@ export function ChatWidget({ locale, t }: { locale: Locale; t: Dictionary }) {
               type="button"
               onClick={() => setOpen(false)}
               aria-label={t.chat.minimized}
-              className="flex size-8 items-center justify-center rounded-full border border-[var(--color-line)] text-[var(--color-muted)] hover:text-[var(--color-text)]"
+              className="flex size-10 items-center justify-center rounded-full border border-[var(--color-line)] text-[var(--color-muted)] hover:text-[var(--color-text)]"
             >
               <Close size={15} />
             </button>

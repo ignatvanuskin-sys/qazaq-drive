@@ -94,7 +94,7 @@ export function BookingModal({
             type="button"
             onClick={onClose}
             aria-label={t.cta.close}
-            className="flex size-9 shrink-0 items-center justify-center rounded-full border border-[var(--color-line)] text-[var(--color-muted)] transition-colors hover:border-[var(--color-line-strong)] hover:text-[var(--color-text)]"
+            className="flex size-11 shrink-0 items-center justify-center rounded-full border border-[var(--color-line)] text-[var(--color-muted)] transition-colors hover:border-[var(--color-line-strong)] hover:text-[var(--color-text)]"
           >
             <Close size={17} />
           </button>

@@ -98,7 +98,7 @@ export function Gallery({
               ref={closeRef}
               type="button"
               onClick={close}
-              className="flex size-10 items-center justify-center rounded-full border border-[var(--color-line-strong)] text-[var(--color-text)]"
+              className="flex size-11 items-center justify-center rounded-full border border-[var(--color-line-strong)] text-[var(--color-text)]"
               aria-label={closeLabel}
             >
               <Close size={18} />
@@ -117,7 +117,7 @@ export function Gallery({
             <button
               type="button"
               onClick={() => setIndex((i) => (i === null ? i : (i - 1 + items.length) % items.length))}
-              className="absolute left-2 flex size-10 items-center justify-center rounded-full border border-[var(--color-line-strong)] bg-[rgba(8,9,10,0.6)] text-[var(--color-text)] sm:left-4"
+              className="absolute left-2 flex size-11 items-center justify-center rounded-full border border-[var(--color-line-strong)] bg-[rgba(8,9,10,0.6)] text-[var(--color-text)] sm:left-4"
               aria-label={prevLabel}
             >
               <ArrowRight size={18} className="rotate-180" />
@@ -125,7 +125,7 @@ export function Gallery({
             <button
               type="button"
               onClick={() => setIndex((i) => (i === null ? i : (i + 1) % items.length))}
-              className="absolute right-2 flex size-10 items-center justify-center rounded-full border border-[var(--color-line-strong)] bg-[rgba(8,9,10,0.6)] text-[var(--color-text)] sm:right-4"
+              className="absolute right-2 flex size-11 items-center justify-center rounded-full border border-[var(--color-line-strong)] bg-[rgba(8,9,10,0.6)] text-[var(--color-text)] sm:right-4"
               aria-label={nextLabel}
             >
               <ArrowRight size={18} />
