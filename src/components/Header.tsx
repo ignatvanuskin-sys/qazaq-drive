@@ -73,7 +73,7 @@ export function Header({
         <Link
           href={`/${locale}`}
           className="group flex shrink-0 items-center gap-2.5"
-          aria-label={`${brand.name} — ${t.nav.book}`}
+          aria-label={`${brand.name} — ${locale === "kz" ? "басты бетке" : "на главную"}`}
         >
           <span aria-hidden className="flex size-8 items-center justify-center rounded-[7px] border border-[var(--color-line-strong)]">
             <span className="block size-2.5 rotate-45 border border-[var(--color-accent)]" />
@@ -117,7 +117,7 @@ export function Header({
                 href={switchLocalePath(pathname || `/${locale}`, code)}
                 hrefLang={code === "ru" ? "ru" : "kk"}
                 aria-current={locale === code ? "true" : undefined}
-                className={`rounded-full px-2.5 py-1 uppercase tracking-[0.08em] transition-colors ${
+                className={`inline-flex min-h-8 min-w-9 items-center justify-center rounded-full px-3 py-1.5 uppercase tracking-[0.08em] transition-colors ${
                   locale === code
                     ? "bg-[rgba(255,255,255,0.09)] text-[var(--color-text)]"
                     : "text-[var(--color-faint)] hover:text-[var(--color-text)]"

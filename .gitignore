@@ -46,3 +46,8 @@ rl.py
 scan.py
 t*.js
 build-*.log
+qa*/
+audit*/
+audit-findings.md
+check-hero.js
+chk3.py

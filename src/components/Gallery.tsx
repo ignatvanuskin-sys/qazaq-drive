@@ -12,7 +12,17 @@ export type GalleryItem = {
   height: number;
 };
 
-export function Gallery({ items, closeLabel }: { items: GalleryItem[]; closeLabel: string }) {
+export function Gallery({
+  items,
+  closeLabel,
+  prevLabel = "Previous",
+  nextLabel = "Next",
+}: {
+  items: GalleryItem[];
+  closeLabel: string;
+  prevLabel?: string;
+  nextLabel?: string;
+}) {
   const [index, setIndex] = useState<number | null>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const restore = useRef<HTMLElement | null>(null);
@@ -108,7 +118,7 @@ export function Gallery({ items, closeLabel }: { items: GalleryItem[]; closeLabe
               type="button"
               onClick={() => setIndex((i) => (i === null ? i : (i - 1 + items.length) % items.length))}
               className="absolute left-2 flex size-10 items-center justify-center rounded-full border border-[var(--color-line-strong)] bg-[rgba(8,9,10,0.6)] text-[var(--color-text)] sm:left-4"
-              aria-label="Previous"
+              aria-label={prevLabel}
             >
               <ArrowRight size={18} className="rotate-180" />
             </button>
@@ -116,7 +126,7 @@ export function Gallery({ items, closeLabel }: { items: GalleryItem[]; closeLabe
               type="button"
               onClick={() => setIndex((i) => (i === null ? i : (i + 1) % items.length))}
               className="absolute right-2 flex size-10 items-center justify-center rounded-full border border-[var(--color-line-strong)] bg-[rgba(8,9,10,0.6)] text-[var(--color-text)] sm:right-4"
-              aria-label="Next"
+              aria-label={nextLabel}
             >
               <ArrowRight size={18} />
             </button>

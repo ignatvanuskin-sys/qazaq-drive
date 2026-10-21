@@ -49,6 +49,8 @@ type Props = {
   initialComment?: string;
   onDone?: () => void;
   compact?: boolean;
+  /** Sticky footer only makes sense inside a height-constrained scroller. */
+  stickyFooter?: boolean;
 };
 
 export function BookingWizard({
@@ -60,6 +62,7 @@ export function BookingWizard({
   initialComment,
   onDone,
   compact = false,
+  stickyFooter = false,
 }: Props) {
   const b = t.booking;
   const uid = useId();
@@ -77,6 +80,7 @@ export function BookingWizard({
   const [publicId, setPublicId] = useState<string | null>(null);
   const [serverError, setServerError] = useState<string | null>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
   const startedAt = useRef(Date.now());
   const restored = useRef(false);
 
@@ -133,6 +137,16 @@ export function BookingWizard({
       if (!draft.consent) next.consent = b.errors.consent;
     }
     setErrors(next);
+
+    // Move focus to the first invalid control so keyboard and screen-reader
+    // users hear the error instead of staying on the heading.
+    if (Object.keys(next).length > 0) {
+      requestAnimationFrame(() => {
+        const invalid = rootRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]');
+        invalid?.focus();
+      });
+    }
+
     return Object.keys(next).length === 0;
   };
 
@@ -256,7 +270,7 @@ export function BookingWizard({
   const progress = ((step + 1) / 4) * 100;
 
   return (
-    <div className="flex max-h-[inherit] flex-col">
+    <div ref={rootRef} className="flex max-h-[inherit] flex-col">
       {/* progress */}
       <div className="border-b border-[var(--color-line)] px-5 pb-4 pt-5 sm:px-7">
         <div className="flex items-center justify-between gap-4">
@@ -624,8 +638,9 @@ export function BookingWizard({
         ) : null}
       </div>
 
-      {/* footer */}
-      <div className="border-t border-[var(--color-line)] px-5 py-4 sm:px-7">
+      {/* footer — sticky so the primary action is always reachable on short
+          screens without scrolling the whole step */}
+      <div className={`${stickyFooter ? "sticky bottom-0 z-10" : ""} border-t border-[var(--color-line)] bg-[var(--color-surface)] px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-7`}>
         <div className="flex items-center justify-between gap-3">
           <button
             type="button"

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import type { Dictionary } from "@/content/i18n/ru";
 import type { Locale } from "@/lib/i18n";
 import { useBooking } from "@/components/booking/context";
@@ -30,10 +31,29 @@ export function ChatWidget({ locale, t }: { locale: Locale; t: Dictionary }) {
   const [disabled, setDisabled] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [leadId, setLeadId] = useState<string | null>(null);
+  const [launcherVisible, setLauncherVisible] = useState(true);
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
   const { open: openBooking } = useBooking();
+
+  /* The booking screen is already the conversion surface: a floating
+     launcher there would sit on top of the form's own buttons. */
+  const hideLauncher = Boolean(pathname?.endsWith("/booking"));
+
+  /* Keep the floating launcher off the hero: it appears once the visitor
+     has scrolled past the first screen. */
+  useEffect(() => {
+    const onScroll = () => setLauncherVisible(window.scrollY > window.innerHeight * 0.55);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -101,9 +121,9 @@ export function ChatWidget({ locale, t }: { locale: Locale; t: Dictionary }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        hidden={open}
+        hidden={open || !launcherVisible || hideLauncher}
         aria-label={t.chat.launcher}
-        className="fixed bottom-[calc(8.8rem+env(safe-area-inset-bottom))] right-4 z-30 flex items-center gap-2 rounded-full border border-[var(--color-line-strong)] bg-[rgba(17,19,21,0.94)] py-2.5 pl-3 pr-4 text-[0.8125rem] font-semibold backdrop-blur-md transition-colors hover:border-[var(--color-accent)] sm:bottom-6 sm:right-6"
+        className="fixed bottom-[calc(5.4rem+env(safe-area-inset-bottom))] right-3 z-30 flex items-center gap-2 rounded-full border border-[var(--color-line-strong)] bg-[rgba(17,19,21,0.94)] py-2.5 pl-3 pr-3.5 text-[0.8125rem] font-semibold backdrop-blur-md transition-colors hover:border-[var(--color-accent)] sm:bottom-6 sm:right-6 sm:pr-4"
       >
         <span className="flex size-7 items-center justify-center rounded-full bg-[rgba(207,133,81,0.16)] text-[var(--color-accent-soft)]">
           <Chat size={15} />

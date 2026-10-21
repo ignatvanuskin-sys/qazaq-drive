@@ -146,7 +146,12 @@ export default async function FleetPage({ params }: { params: Promise<{ locale: 
           )}
 
           <div className="mt-10">
-            <Gallery items={gallery} closeLabel={t.cta.close} />
+            <Gallery
+              items={gallery}
+              closeLabel={t.cta.close}
+              prevLabel={kz ? "Алдыңғы сурет" : "Предыдущее фото"}
+              nextLabel={kz ? "Келесі сурет" : "Следующее фото"}
+            />
           </div>
         </div>
       </section>

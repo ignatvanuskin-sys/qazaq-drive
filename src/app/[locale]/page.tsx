@@ -42,83 +42,87 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd(locale)) }}
       />
 
-      {/* ---------------------------------------------------------------- HERO */}
-      <section className="relative overflow-hidden">
-        <div aria-hidden className="grid-texture pointer-events-none absolute inset-x-0 top-0 h-[560px] opacity-70" />
-        <div className="container-page relative">
-          <div className="grid items-center gap-10 pt-8 sm:pt-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:pt-14">
-            <div className="lg:pb-16">
-              <p className="rule-label eyebrow">
-                <span>{t.home.eyebrow}</span>
-              </p>
-              <h1 className="display display-xl mt-6">
-                <span className="block">{t.home.h1a}</span>
-                <span className="serif-accent mt-1 block text-[var(--color-accent-soft)]">
-                  {t.home.h1b}
-                </span>
-              </h1>
-              <p className="lead mt-6 max-w-[33rem]">{t.home.lead}</p>
+      {/* ---------------------------------------------------------------- HERO
+          Mobile-first: the key photograph is a full-bleed background layer,
+          with a two-stop scrim so type stays readable at every width. */}
+      <section className="relative isolate -mt-[68px] flex min-h-[100svh] flex-col justify-end overflow-hidden pt-[68px] sm:-mt-[76px] sm:min-h-[92svh] sm:pt-[76px] lg:min-h-[92svh]">
+        <Image
+          src={media.hero.src}
+          alt={kz ? media.hero.altKz : media.hero.altRu}
+          fill
+          priority
+          sizes="100vw"
+          quality={82}
+          className="-z-20 object-cover object-[62%_center] sm:object-[center_38%]"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(8,9,10,0.78)_0%,rgba(8,9,10,0.34)_34%,rgba(8,9,10,0.72)_74%,rgba(8,9,10,0.97)_100%)]"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 bg-[radial-gradient(120%_80%_at_15%_20%,rgba(8,9,10,0.55)_0%,transparent_60%)]"
+        />
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <BookButton className="btn btn-primary w-full sm:w-auto">
-                  {t.cta.book}
-                  <ArrowRight size={17} />
-                </BookButton>
-                <Link href={`/${locale}/programs`} className="btn btn-ghost w-full sm:w-auto">
-                  {t.cta.chooseProgram}
-                </Link>
-              </div>
+        <div className="container-page relative pb-9 pt-16 sm:pb-12 sm:pt-20 lg:pb-16">
+          <div className="max-w-[42rem]">
+            <p className="rule-label eyebrow text-[rgba(244,243,241,0.72)]!">
+              <span>{t.home.eyebrow}</span>
+            </p>
+            <h1 className="display display-xl mt-5">
+              <span className="block">{t.home.h1a}</span>
+              <span className="serif-accent mt-1 block text-[var(--color-accent-soft)]">
+                {t.home.h1b}
+              </span>
+            </h1>
+            <p className="lead mt-5 max-w-[33rem] text-[rgba(244,243,241,0.82)]!">{t.home.lead}</p>
 
-              <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
-                <div className="flex items-center gap-2">
-                  <span className="flex gap-0.5 text-[var(--color-accent)]" aria-hidden>
-                    {[0, 1, 2, 3, 4].map((i) => (
-                      <Star key={i} size={13} />
-                    ))}
-                  </span>
-                  <span className="text-[0.82rem] text-[var(--color-muted)]">
-                    <strong className="font-semibold text-[var(--color-text)]">
-                      {reviewMeta.rating.toFixed(1)}
-                    </strong>{" "}
-                    — {reviewMeta.ratings} {t.ui.ratings}{" "}
-                    <span className="text-[var(--color-faint)]">·</span>{" "}
-                    <a
-                      href={brand.links.gis2Reviews}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="link-underline text-[var(--color-muted)]"
-                    >
-                      2GIS
-                    </a>
-                  </span>
-                </div>
-                <span className="hidden h-3 w-px bg-[var(--color-line-strong)] sm:block" aria-hidden />
-                <span className="text-[0.82rem] text-[var(--color-muted)]">
-                  {brand.categories.length} {t.home.stats.categories} · A–D1E
-                </span>
-              </div>
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <BookButton className="btn btn-primary w-full sm:w-auto">
+                {t.cta.book}
+                <ArrowRight size={17} />
+              </BookButton>
+              <Link href={`/${locale}/programs`} className="btn btn-ghost w-full sm:w-auto">
+                {t.cta.chooseProgram}
+              </Link>
             </div>
 
-            <div className="relative">
-              <div className="hero-photo aspect-[5/4] sm:aspect-[16/10] lg:aspect-[4/5]">
-                <Image
-                  src={media.hero.src}
-                  alt={kz ? media.hero.altKz : media.hero.altRu}
-                  width={media.hero.width}
-                  height={media.hero.height}
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 46vw"
-                  className="img-cover"
-                />
+            <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2.5">
+              <div className="flex items-center gap-2">
+                <span className="flex gap-0.5 text-[var(--color-accent)]" aria-hidden>
+                  {[0, 1, 2, 3, 4].map((i) => (
+                    <Star key={i} size={13} />
+                  ))}
+                </span>
+                <span className="text-[0.82rem] text-[rgba(244,243,241,0.78)]">
+                  <strong className="font-semibold text-[var(--color-text)]">
+                    {reviewMeta.rating.toFixed(1)}
+                  </strong>{" "}
+                  — {reviewMeta.ratings} {t.ui.ratings}{" "}
+                  <span className="text-[var(--color-faint)]">·</span>{" "}
+                  <a
+                    href={brand.links.gis2Reviews}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="link-underline text-[rgba(244,243,241,0.78)]"
+                  >
+                    2GIS
+                  </a>
+                </span>
               </div>
-              <div className="absolute bottom-4 left-4 hidden rounded-full border border-[rgba(255,255,255,0.14)] bg-[rgba(8,9,10,0.6)] px-3 py-1.5 text-[0.68rem] uppercase tracking-[0.12em] text-[var(--color-muted)] backdrop-blur-sm sm:block">
-                {kz ? media.hero.captionKz : media.hero.captionRu}
-              </div>
+              <span className="hidden h-3 w-px bg-[rgba(255,255,255,0.28)] sm:block" aria-hidden />
+              <span className="text-[0.82rem] text-[rgba(244,243,241,0.78)]">
+                {brand.categories.length} {t.home.stats.categories} · A–D1E
+              </span>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* stat strip */}
-          <dl className="grid grid-cols-2 gap-y-7 border-t border-[var(--color-line)] py-8 sm:grid-cols-4 sm:gap-x-6">
+      {/* stat strip */}
+      <section className="border-b border-[var(--color-line)] bg-[var(--color-ink-2)]">
+        <div className="container-page">
+          <dl className="grid grid-cols-2 gap-y-7 py-8 sm:grid-cols-4 sm:gap-x-6">
             {[
               { value: reviewMeta.rating.toFixed(1), label: t.home.stats.rating },
               { value: String(reviewMeta.reviews), label: t.home.stats.reviews },

@@ -72,6 +72,12 @@ body {
   border-radius: 2px;
 }
 
+/* Programmatic focus targets (step headings, dialogs) must not paint a ring. */
+[tabindex="-1"]:focus,
+[tabindex="-1"]:focus-visible {
+  outline: none;
+}
+
 /* Scrollbar — subtle, desktop only */
 @media (pointer: fine) {
   ::-webkit-scrollbar {

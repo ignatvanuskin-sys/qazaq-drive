@@ -25,8 +25,8 @@ export default async function BookingPage({ params }: { params: Promise<{ locale
 
   return (
     <section className="section-tight">
-      <div className="container-page grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
-        <div>
+      <div className="container-page grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+        <div className="order-2 lg:order-1">
           <p className="eyebrow">{t.booking.title}</p>
           <h1 className="display display-l mt-4">{t.booking.h1}</h1>
           <p className="lead mt-4 max-w-[26rem]">{t.booking.lead}</p>
@@ -66,7 +66,7 @@ export default async function BookingPage({ params }: { params: Promise<{ locale
           </div>
         </div>
 
-        <div className="overflow-hidden rounded-[var(--radius-md)] border border-[var(--color-line)] bg-[var(--color-surface)]">
+        <div className="order-1 rounded-[var(--radius-md)] border border-[var(--color-line)] bg-[var(--color-surface)] lg:order-2">
           <BookingWizard locale={locale} t={t} compact />
         </div>
       </div>

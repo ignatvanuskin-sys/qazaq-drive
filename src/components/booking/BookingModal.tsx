@@ -104,6 +104,7 @@ export function BookingModal({
             locale={locale}
             t={t}
             whatsapp={whatsapp}
+            stickyFooter
             compact
             initialIntent={prefills?.intent}
             initialProgram={prefills?.program}

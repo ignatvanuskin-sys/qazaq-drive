@@ -177,7 +177,7 @@ export default async function ContactsPage({ params }: { params: Promise<{ local
               address={`${config.addressLine1}, ${config.city}`}
             />
 
-            <div className="mt-6 overflow-hidden rounded-[var(--radius-md)] border border-[var(--color-line)] bg-[var(--color-surface)]">
+            <div className="mt-6 rounded-[var(--radius-md)] border border-[var(--color-line)] bg-[var(--color-surface)]">
               <div className="border-b border-[var(--color-line)] px-5 py-4">
                 <h2 className="text-[1rem] font-semibold">{t.contacts.formTitle}</h2>
                 <p className="mt-1 text-[0.8rem] text-[var(--color-muted)]">{t.contacts.formLead}</p>
