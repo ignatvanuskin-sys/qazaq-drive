@@ -79,6 +79,7 @@ export function BookingWizard({
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [publicId, setPublicId] = useState<string | null>(null);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [focusTick, setFocusTick] = useState(0);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const startedAt = useRef(Date.now());
@@ -119,6 +120,14 @@ export function BookingWizard({
     headingRef.current?.focus();
   }, [step]);
 
+  useEffect(() => {
+    if (focusTick === 0 || !rootRef.current) return;
+    const target =
+      rootRef.current.querySelector<HTMLElement>('[aria-invalid="true"]') ??
+      rootRef.current.querySelector<HTMLElement>('[data-error-summary]');
+    target?.focus();
+  }, [focusTick]);
+
   const patch = (values: Partial<Draft>) => {
     setDraft((prev) => ({ ...prev, ...values }));
     setErrors((prev) => {
@@ -138,14 +147,9 @@ export function BookingWizard({
     }
     setErrors(next);
 
-    // Move focus to the first invalid control so keyboard and screen-reader
-    // users hear the error instead of staying on the heading.
-    if (Object.keys(next).length > 0) {
-      requestAnimationFrame(() => {
-        const invalid = rootRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]');
-        invalid?.focus();
-      });
-    }
+    // Focus is moved after the commit, in the effect below, so the DOM
+    // already carries aria-invalid when we look for it.
+    if (Object.keys(next).length > 0) setFocusTick((tick) => tick + 1);
 
     return Object.keys(next).length === 0;
   };
@@ -313,6 +317,8 @@ export function BookingWizard({
         {Object.keys(errors).length > 0 ? (
           <div
             role="alert"
+            tabIndex={-1}
+            data-error-summary
             className="mt-4 rounded-[8px] border border-[rgba(224,108,90,0.35)] bg-[rgba(224,108,90,0.08)] p-3"
           >
             <p className="text-[0.8rem] font-semibold text-[#f0937f]">{b.errors.summary}</p>
